@@ -1655,18 +1655,17 @@
 		var flv=301971;															// Collab video flavor
 		if (url.match(/<object/i)) {											// Object-style embed code
 			mid=url.match(/kaltura_player_([^"]+)/i)[1];						// Get media id
-			url="//www.kaltura.com/p/"+pid+"/sp/0/playManifest/entryId/"+mid+"/format/url/flavorParamId/"+pid+"/video.mp4"
+			url="//www.kaltura.com/p/"+pid+"/sp/0/playManifest/entryId/"+mid+"/format/url/video.mp4"
 			}
 		else if (url.match(/<iframe/i)) {										// Iframe-style embed code
 			pid=url.match(/partner_id\/(\d+)/i)[1];								// Get partner id
 			mid=url.match(/entry_id=([^&]+)/)[1];								// Get media id
 			flv="0_ithj599o";													// MP4 used by mediabase
-			url="//www.kaltura.com/p/"+pid+"/sp/0/playManifest/entryId/"+mid+"/format/url/flavorParamId/"+pid+"/video.mp4"
+			url="//www.kaltura.com/p/"+pid+"/sp/0/playManifest/entryId/"+mid+"/format/url/video.mp4"
 			}
-		else if (url.match(/embed/i)) {
+		else if (url.match(/embed/i)) {											// Kaltura link
 			pid=url.match(/partner_id\/(\d+)/i)[1];								// Get partner id
 			mid=url.match(/entry_id\/(\w+)/i)[1];								// Get media id
-			flv="0_ithj599o";													// MP4 used by mediabase
 			url="//www.kaltura.com/p/"+pid+"/sp/0/playManifest/entryId/"+mid+"/format/url/video.mp4"
 			}
 		return url;																// Return converted url
