@@ -178,7 +178,7 @@
 	var shivaLib=null;															// Holds shiva
 	var searchMode=false;														// Don't trigger anything
 	var keyFlag="";																// Holds key flags												
-	var host="//qmediaplayer.com/";												// Set host
+	var host="//stagetools.com/qmedia/";												// Set host
 	var playerStarted=-1;														// Player started
 	var userName="",password="",curShow=0;										// Login info
 	var loopStart=loopEnd=0,loopLast=-1;										// Looping
@@ -205,7 +205,7 @@
 		if (drupalMan)	host=url="";											// If drupal, kill url
 		if (url && !isNaN(url)) {												// If a number
 			curShow=url;														// Save show number											
-			url=hosrt+"/loadshow.php?id="+url;									// Get from db
+			url=host+"/loadshow.php?id="+url;									// Get from db
 			}	
 		else if ((url) && (!url.match(/\./)))									// No file extension
 			url+=".json";														// Add txt
