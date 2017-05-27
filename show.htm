@@ -205,7 +205,7 @@
 		if (drupalMan)	host=url="";											// If drupal, kill url
 		if (url && !isNaN(url)) {												// If a number
 			curShow=url;														// Save show number											
-			url="//qmediaplayer.com/loadshow.php?id="+url;						// Get from db
+			url=hosrt+"/loadshow.php?id="+url;									// Get from db
 			}	
 		else if ((url) && (!url.match(/\./)))									// No file extension
 			url+=".json";														// Add txt
@@ -1216,7 +1216,7 @@
 			var t=showVectors[Math.floor(curAssess/100)][curAssess%100].ps+.6;	// Roll player from where we left off
 			if (v[2] && v[2].match(/goto=#/)) {									// If a valid goto to load show
 				RunPlayer("pause");												// Pause
-				var url="//qmediaplayer.com/loadshow.php?id="+v[2].substr(6);	// Get from db
+				var url=host+"loadshow.php?id="+v[2].substr(6);					// Get from db
 				$.ajax({ url: url, dataType:'jsonp' });							// Get jsonp and call LoadShow() from it
 				}
 			if (v[2] && v[2].match(/goto=/) && !v[2].match(/goto=Def/i)) 		// If a valid goto spec's
@@ -1509,7 +1509,7 @@
 		else if (what == "load") {												// Load a new show
 			RunPlayer("pause");													// Pause
 			RunPlayer("scrub",0);												// Got0 to 0
-			var url="//qmediaplayer.com/loadshow.php?id="+param;				// Get from db
+			var url=host+"loadshow.php?id="+param;								// Get from db
 			$.ajax({ url: url, dataType:'jsonp' });								// Get jsonp and call LoadShow() from it
 			}
 		else if (what == "ready") {												// When ready
