@@ -4,8 +4,8 @@ header('Expires: Sun, 01 Jul 2005 00:00:00 GMT');
 header('Pragma: no-cache'); 
 require_once('config.php');
 	
-	$email=addEscapes(strtolower($_REQUEST['email']));			// Get email
-	$show=addEscapes($_REQUEST['show']);						// Get show
+	$email=addEscapes(strtolower($_GET['email']));			// Get email
+	$show=addEscapes($_GET['show']);						// Get show
 										
 	$query="SELECT * FROM qusers WHERE email = '".$email."' AND showNum = '".$show."'";	// Look for data
 	$result=mysql_query($query);								// Run query

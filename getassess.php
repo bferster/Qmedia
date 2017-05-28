@@ -7,12 +7,12 @@ require_once('config.php');
 	$email="";
 	$show="";
 	$password="";
-	if (isSet($_REQUEST['email'])) 								// If set
-		$email=addslashes($_REQUEST['email']);					// Get email
-	if (isSet($_REQUEST['show'])) 								// If set
-		$show=addslashes($_REQUEST['show']);					// Get show
-	if (isSet($_REQUEST['password'])) 							// If set
-		$password=addslashes($_REQUEST['password']);			// Get password
+	if (isSet($_GET['email'])) 									// If set
+		$email=addslashes($_GET['email']);						// Get email
+	if (isSet($_GET['show'])) 									// If set
+		$show=addslashes($_GET['show']);						// Get show
+	if (isSet($_GET['password'])) 								// If set
+		$password=addslashes($_GET['password']);				// Get password
 			
 	$query="SELECT * FROM qusers WHERE ";						// Query start 
 	if ($email)													// If a email spec'd

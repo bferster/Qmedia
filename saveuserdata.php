@@ -7,10 +7,10 @@ header('Access-Control-Allow-Methods: POST');
 header('Access-Control-Max-Age: 1000');
 require_once('config.php');
 			
-	$email=strtolower($_REQUEST['email']);						// Get email
-	$password=$_REQUEST['password'];							// Get password
-	$event=$_REQUEST['event'];									// Get event
-	$show=$_REQUEST['show'];									// Get show
+	$email=strtolower($_REQUEST['email']);							// Get email
+	$password=$_REQUEST['password'];								// Get password
+	$event=$_REQUEST['event'];										// Get event
+	$show=$_REQUEST['show'];										// Get show
 	
 	if (!$email || !$show || !$event) {							// Not enough data
 		if (!$email)											// If no email

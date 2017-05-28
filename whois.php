@@ -11,7 +11,7 @@ require_once('config.php');
 		exit();													// Quit
 		}
 	$num=min(mysql_numrows($result),100);						// Get num rows, cap at 100
-	$pass=$_REQUEST['pass'];									// Password
+	$pass=$_GET['pass'];										// Password
 	
 	print("<font face='sans-serif'>");							// Font
 	print("<b>The current 100 projects</b>:<br>");				// Header

@@ -5,8 +5,8 @@ header('Pragma: no-cache');
 require_once('config.php');
 			
 	$query="SELECT * FROM qshow";								// Query start
-	if (isSet($_REQUEST['email'])) {		 					// If set
-		$email=strtolower(addslashes($_REQUEST['email']));					// Get email
+	if (isSet($_GET['email'])) {		 						// If set
+		$email=strtolower(addslashes($_GET['email']));			// Get email
 		$query.=" WHERE LOWER(email) = '".$email."' ORDER by date DESC";	// WHERE email search
 		}
 	else{
@@ -18,7 +18,7 @@ require_once('config.php');
 		print("Error getting projects");						// Return error
 		exit();													// Quit
 		}
-	$pass=strtolower(addslashes($_REQUEST['pass']));			// Get pass option
+	$pass=strtolower(addslashes($_GET['pass']));				// Get pass option
 	$body="Here are projects saved under the email ".$email.":\n\n";// Header
 	$num=mysql_numrows($result);								// Get num rows
 	if ($pass == 5) {											// Getting folio password

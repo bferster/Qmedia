@@ -7,19 +7,23 @@ require_once('config.php');
 
 	$deleted=0;
 	$ver=0;
-	if (isSet($_REQUEST['deleted'])) 		 					// If set
-		$deleted=addslashes($_REQUEST['deleted']);				// Get deleted
-	if (isSet($_REQUEST['ver'])) 		 						// If set
-		$ver=addslashes($_REQUEST['ver']);						// Get deleted
-		
+	$email="";
+	if (isSet($_GET['deleted'])) 		 						// If set
+		$deleted=addslashes($_GET['deleted']);					// Get deleted
+	if (isSet($_GET['ver'])) 		 							// If set
+		$ver=addslashes($_GET['ver']);							// Get deleted
+	if (isSet($_GET['email'])) 		 							// If set
+		$email=addslashes($_GET['email']);						// Get email
 	$query="SELECT * FROM qshow WHERE deleted = '$deleted' AND version = '$ver'";	// Query start
-	if (isSet($_REQUEST['email'])) 		 						// If set
-		$query.=" AND LOWER(email) = '".strtolower(addslashes($_REQUEST['email']))."' ORDER by date DESC";	// WHERE email search
+	if ($email)
+		$query.=" AND LOWER(email) = '".strtolower($email)."'";	// WHERE email search
+ 	$query.=" ORDER by date DESC";								// Sort
 	$result=mysql_query($query);								// Query
 	if ($result == false) {										// Bad query
 		print("-1\n");											// Return error
 		exit();													// Quit
 		}
+
 	$num=mysql_numrows($result);								// Get num rows
 	print("qmfListFiles([\n");									// Function
 	for ($i=0;$i<$num;$i++) {									// For each row
@@ -33,4 +37,4 @@ require_once('config.php');
 	print("\n])");												// Close function
 	mysql_close();												// Close session
 ?>
-	
+

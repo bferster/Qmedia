@@ -13,15 +13,15 @@ require_once('config.php');
 	$script="";												
 	$private='0';												
 
-	$email=$_REQUEST['email'];									// Get email
-	$password=$_REQUEST['password'];							// Get password
+	$email=$_GET['email'];										// Get email
+	$password=$_GET['password'];								// Get password
 	
-	if (isSet($_REQUEST['title'])) 								// If set
-		$title=$_REQUEST['title'];								// Get it
-	if (isSet($_REQUEST['script'])) 							// If set
-		$script=$_REQUEST['script'];							// Get it
-	if (isSet($_REQUEST['private'])) 							// If set
-		$private=$_REQUEST['private'];							// Get it
+	if (isSet($_GET['title'])) 									// If set
+		$title=$_GET['title'];									// Get it
+	if (isSet($_GET['script'])) 								// If set
+		$script=$_GET['script'];								// Get it
+	if (isSet($_GET['private'])) 								// If set
+		$private=$_GET['private'];								// Get it
 		
 	$query="SELECT * FROM qshow WHERE email = '".$email."' AND version = '5'"; 	// Look existing one	
 	$result=mysql_query($query);								// Query

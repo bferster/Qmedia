@@ -4,8 +4,8 @@ header('Expires: Sun, 01 Jul 2005 00:00:00 GMT');
 header('Pragma: no-cache'); 
 require_once('config.php');
 	
-	$id=$_REQUEST['id'];										// Get ID
-	$password=$_REQUEST['password'];							// Password
+	$id=$_GET['id'];											// Get ID
+	$password=$_GET['password'];								// Password
 	$password=addEscapes($password);							// Escape password	
 	$id=addEscapes($id);										// ID
 	$query="SELECT * FROM qshow WHERE id = '$id'";				// Make query

@@ -21,7 +21,7 @@ require_once('config.php');
 	
 	if (isSet($_REQUEST['id'])) 								// If set
 		$id=$_REQUEST['id'];									// Get it
-	if (isSet($_REQUEST['title'])) 								// If set
+	if (isSet($_REQUEST['title'])) 								// If setzzzz
 		$title=$_REQUEST['title'];								// Get it
 	if (isSet($_REQUEST['script'])) 							// If set
 		$script=$_REQUEST['script'];							// Get it
