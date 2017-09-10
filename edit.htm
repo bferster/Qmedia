@@ -1191,7 +1191,7 @@
 		else if (type == "Flickr")												// If Flickr
 			GetFlickrImage(function(s) { callback(s); } );						// Get url
 		else if (type == "HTML")												// If HTML
-			GetHTMLEditor(val,function(s) { callback("<html>"+s+"</html>"); } );// Get code
+			GetHTMLEditor(val,function(s) { callback("<html>"+s+"</h"+"tml>"); } );// Get code  (split to remove goDaddy page monitering injection)
 		else if (type == "Video") {												// If Video
 			val=val.replace(/video\.htm\?src=/,"");								// Remove path
 			GetTextBox("Media Source", "Type in media source id or URL",val,	// Get text
