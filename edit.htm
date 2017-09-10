@@ -157,7 +157,9 @@
 								ChangePane("intro");	Preview();		break;	// New file
 					case "12":	ChangePane("intro");	qmf.Load(); 	break;	// Load file
 					case "13":	ChangePane("intro");	qmf.Save(0); 	break;	// Save file
-					case "14":	ChangePane("intro");	qmf.Save(1); 	break;	// Save as... 
+					case "14":	ConfirmBox("This will create a new show, with a new show number. If you want to save into an existing show, pick the \"Save\" option instead.",
+									function() {	ChangePane("intro");  qmf.Save(1); });		
+								break;			
 					case "15":	ChangePane("intro");	qmf.Delete(); 	break;	// Delete
 					case "16":	ChangePane("intro");	qmf.Delete(1); 	break;	// Undelete
 					case "21":	Undo();									break;	// Undo
