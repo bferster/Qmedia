@@ -679,6 +679,10 @@
 							$("#cache"+pane).html("<img src='"+oo.cs+"'>"); 	// Load as image
 						}
 					}						
+				if (o.p && o.p.match(/load:/)) 	{								// If a player command
+					var v=o.p.split(":");										// Split
+					RunPlayer(v[0],v[1]);  										// Send command to player
+					}
 				break;															// Stop looking
 				}																	
 			}
@@ -1509,7 +1513,7 @@
 			}
 		else if (what == "load") {												// Load a new show
 			RunPlayer("pause");													// Pause
-			RunPlayer("scrub",0);												// Got0 to 0
+			RunPlayer("scrub",0);												// Goto to 0
 			var url=host+"loadshow.php?id="+param;								// Get from db
 			$.ajax({ url: url, dataType:'jsonp' });								// Get jsonp and call LoadShow() from it
 			}
