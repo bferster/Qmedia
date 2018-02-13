@@ -18,7 +18,7 @@
  		.unselectable { -moz-user-select: none;     -khtml-user-select: none;
 		   			 	-webkit-user-select: none;  -ms-user-select: none;   user-select: none;
 		   				}
- 		.mainSty { 		font-family:Verdana,Geneva,sans-serif; font-size:12px; 
+ 		.mainSty { 		font-family:Verdana,Geneva,sans-serif; font-size:12px;
 						padding:0px; margin:0px;border-radius:1.5em;
 						-moz-user-select: none;     -khtml-user-select: none;
 		   			 	-webkit-user-select: none;  -ms-user-select: none;   user-select: none;
@@ -29,14 +29,12 @@
 		.textSty { 		padding-left:1.3em; padding-right:1.3em;
 						} 
  		.promptSty { 	padding-left:3.3em;padding-right:3.3em;padding-top:.33em;padding-bottom:1.2em;
-						margin:.6em;
-						font-weight:bold;
-						border-bottom:1px solid #ccc;
+						margin:.6em; font-weight:bold; border-bottom:1px solid #ccc;
 						} 
 		.optionsLSty { 	text-align:left;padding-top:.33em;display:inline-block;
 						} 
 		.optionsRSty { 	padding-top:.33em;padding-left:1.33em;display:inline-block;
-						vertical-align:top;float:center;
+						vertical-align:top;
 						} 
  		.nextbutSty {	border-radius:.83em;color:#009900;font-size:1em;
  						}
@@ -46,7 +44,7 @@
   						}
  		.is {			border-radius:.8em;padding-left:.6em;padding-right:.6em;padding-top:1px;
 						border:1px solid #999;font-size:1em;height;1.66em;width:16.66em;
-						]
+						}
 	
  	</style>
 	<script>
@@ -61,14 +59,17 @@
 <body>
 
 <div id="containerDiv" style="position:absolute;top:0px;left:0px;width:100%" class="mainSty">
-	<div id="titleDiv" class="titleSty"></div>
-	<div id="textDiv" class="textSty"></div>
-	<div id="promptDiv" class="promptSty"></div>
-	<div style="text-align:center" >
-		<div id="optionsLDiv" class="optionsLSty"></div>
-		<div id="optionsRDiv" class="optionsRSty"><br></div>
+	<div style="margin-left:auto;margin-right:auto;max-width:600px">
+		<div id="titleDiv" class="titleSty"></div>
+		<div id="textDiv" class="textSty"></div>
+		<div id="promptDiv" class="promptSty"></div>
+		<div style="text-align:center;padding-left:16px;padding-right:16px;">
+			<div id="optionsLDiv" class="optionsLSty"></div>
+			<div id="optionsRDiv" class="optionsRSty"><br></div>
+		</div>
 	</div>
 </div>
+
 <script>
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -109,10 +110,10 @@
 		e.data+=',"optionType":"slider","options":["Very Low:Very High"]},';
 		e.data+='{"title":"Contribution","skip":"false"';
 		e.data+=',"text":"<b>Of the two workload measures below, which one contributed the most to the task you just completed?.</b>"';
-		e.data+=',"optionType":"radio","options":["Physical Demand","Performance"]}';
+		e.data+=',"optionType":"radio","options":["How successful were you in accomplishing what you were asked to doHow successful were you in accomplishing what you were asked to do/Physical Demand","Performance"]}';
 		e.data+="]}"
 		
-	//	QmediaEventHandler(e);													
+//		QmediaEventHandler(e);													
 	
 		/////////////////////////////////////////////////////////////////	
 
@@ -153,11 +154,14 @@
 					else							col="#aa0000";				// A wrong one
 					}
 				lab=d.options[i].replace(/^\*/,"");								// Remove "correct" dot
+				str+="<div style='display:inline-block;width:75%;margin-left:12%'>";	// Options div
 				str+="<span style='color:"+col+"'>";							// Add color span
-			 	str+="&nbsp;&nbsp; <input type='"+d.optionType+"' name='opt' id='opt"+i+"' value='"+lab+"'>"+lab+"</span>";	// Add line
+			 	str+="<input type='"+d.optionType+"' name='opt' id='opt"+i+"' value='"+lab+"' style='vertical-align:top'>"; // Add button
+				str+="&nbsp;<div style='display:inline-block;width:calc(100% - 32px);margin-bottom:4px'>"+lab+"</div></span>";	// Add option text
 				if (d.options[i].toLowerCase() == "*other")						// If an other option
 		 			str+="&nbsp <input class='is' style='width:6em;' type='text' id='otherOpt'><br></span>";	// Add line
 				else	str+="<br>";											// Add break
+				str+="</div>";
 				}
 			}
 		if ((d.options) && (d.optionType == "cloze")) {							// Cloze
