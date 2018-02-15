@@ -4,6 +4,7 @@
 	<meta charset="UTF-8" />
 	<link REL="SHORTCUT ICON" HREF="qlogo.ico">
 	<title>Qmedia Player</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
  	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>	
 	<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/smoothness/jquery-ui.css" />
 	<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
@@ -17,12 +18,12 @@
 		tr.odd { 		background-color:#e0e0e0; }
 		.ui-autocomplete { max-height: 300px; overflow-y: auto; }
 	
- 		.qm-unselectable { -moz-user-select: none;     -khtml-user-select: none;
-		   			 	-webkit-user-select: none;  -ms-user-select: none;   user-select: none;
+ 		.qm-unselectable { -moz-user-select: none; -khtml-user-select: none;
+		   			 	-webkit-user-select: none; -ms-user-select: none; user-select: none;
 		   				}
-		.qm-splash { 	text-align:center;position:absolute;top:100px;left:200px;
+		.qm-splash { 	width:1 00%; text-align: center; margin-top: 80px;
 						}
-		.qm-base { 		font-family:Verdana,Geneva,sans-serif;
+		.qm-base { 		font-family:Verdana,Geneva,sans-serif; margin-left:auto; margin-right:auto;
 						}	
 		.qm-title { 	font-family:Verdana,Geneva,sans-serif; font-size:x-large;color:#fff;
 						padding:8px;margin:0px;font-weight:bold;
@@ -99,7 +100,7 @@
 </head>
 <body>
 <div id="splashDiv" class="qm-splash"><img src="qlogo.png"></div>
-<div id="showDiv" style="padding:0px;margin:0px;opacity:0;" class="qm-base">
+<div id="showDiv" style="padding:0px;opacity:0;" class="qm-base">
 	<div id="titleDiv" style="position:absolute;opacity:inherit" class="qm-title qm-unselectable"></div>
 	<div id="playerDiv" style="position:absolute;opacity:inherit" class="qm-player qm-unselectable"></div>
 	<div id="slideDiv" style="position:absolute;opacity:inherit" class="qm-slide qm-unselectable"></div>
@@ -179,12 +180,13 @@
 	var shivaLib=null;															// Holds shiva
 	var searchMode=false;														// Don't trigger anything
 	var keyFlag="";																// Holds key flags												
-	var host="//stagetools.com/qmedia/";												// Set host
+	var host="//stagetools.com/qmedia/";										// Set host
 	var playerStarted=-1;														// Player started
 	var userName="",password="",curShow=0;										// Login info
 	var loopStart=loopEnd=0,loopLast=-1;										// Looping
 	var lastClickTime=0;														// Store last click time
 	var drupalMan=false;														// Flag for drupal manager	
+	var offx=0;																	// Start of content
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // INIT
@@ -197,8 +199,10 @@
 			window.addEventListener("message",shivaEventHandler,false);			// Add event handler
 		else																	// Use other method
 			window.attachEvent("message",shivaEventHandler);					// Add handler
-		
-		isMobile=navigator.userAgent.match(/(ipad|iphone|ipod|android)/i) ? true : false; // Set mobile flag
+		$(window).resize(ResizePanes);                                     		// On window resizing
+		isMobile=navigator.platform.match(/(ipad|iphone|ipod|android)/i) ? true : false; // Set mobile flag id ios
+		if (!isMobile)															// Check for Android
+			isMobile=navigator.userAgent.match(/android/i) ? true : false; 		// Set mobile flag
 		var url=window.location.search.substring(1);							// Get query string
 		drupalMan=(""+url).match(/pr=d/);										// If called from Drupal manager
 		if (!url)																// Nothing on command line
@@ -230,19 +234,19 @@
 			cursorAt:{left:16},	iframeFix:true,									// Cursor offset
 			cursor: "col-resize", axis:"x",										// X-only
 			start: function(event, ui) {										// On drag start
-				$("#playerSiz1").css({ width:"500px", left:"-500px" });			// Widen hiding div
+				$("#playerSiz1").css({ width:"500px", left:(offx-500)+"px" });	// Widen hiding div
 				},
 			drag: function(event, ui) {											// On drag
 				var wid=Math.min($("body").width(),sd.width);					// Cap at screen size
 				if ((" "+sd.width).match("%"))									// If % in width
-					wid=$("body").width()*(sd.width.replace(/%/,"")/100);		// Get proper width											
-			 	sd.playerSlideRatio=Math.max(0,Math.min(1,(event.clientX-8)/(wid+16)));	// Set ratio between windows
+				wid=$("body").width()*(sd.width.replace(/%/,"")/100);		// Get proper width											
+				sd.playerSlideRatio=Math.max(0,Math.min(1,(event.clientX-offx-8)/(wid+16)));	// Set ratio between windows
 				if (Math.abs(sd.playerSlideRatio-.5) < .01) 					// If close to center
 					sd.playerSlideRatio=.5;										// Snap it there
 				ResizePanes();													// Resize panes
 				},
 			stop: function(event, ui) {											// On drag end
-				$("#playerSiz1").css({ width:"40px", left:"-16px" });			// Contract hiding div
+				$("#playerSiz1").css({ width:"40px", left:(offx-16)+"px" });	// Contract hiding div
 				ResizePanes();													// Resize panes
 				SendShivaMessage("ShivaAct=playerwid",sd.playerSlideRatio);		// Send that position has changed
 				}
@@ -281,7 +285,7 @@
 			str+="<tr><td>Take notes</td><td><input id='pNotes' type='checkbox'></td></tr>";
 			str+="<tr><td>Zen mode</td><td><input id='pZen' type='checkbox'></td></tr>";
 			str+="</table>";
-			$("body").append("<div id='setpopup' style='display:none;position:absolute;width:"+w+"px;height:auto;background-color:#f8f8f8;left:"+x+"px;top:"+y+"px;border:1px solid #ccc;padding:8px'>"+str+"</div>");
+			$("body").append("<div id='setpopup' style='display:none;position:absolute;width:"+w+"px;height:auto;background-color:#f8f8f8;left:"+(x+offx)+"px;top:"+y+"px;border:1px solid #ccc;padding:8px'>"+str+"</div>");
 			var y=$("#controlDiv").css("top").replace(/px/,"")-$("#setpopup").height()-11;			
 			$("#pZen").prop("checked",playerZen);								// Set Zen box
 			$("#pNotes").prop("checked",playerNotes);							// Set Notes box
@@ -464,6 +468,7 @@
 		var pt=8;
 		var r1=sd.playerSlideRatio;												// Ratio 1
 		var r2=sd.transInfoRatio;												// Ratio 2
+		offx=$("#showDiv").offset().left;										// Offset X from base
 		if (playerZen) {														// In Zen mode
 			r1=r2=1;															// Make screen full
 			$("#infoDiv").css("display","none");								// Hide info	
@@ -493,9 +498,9 @@
 			$("#titleDiv").css("display","none")								// Hide bar
 		var h=Math.max(((wid-4)*sd.playerAspect)-(w*sd.playerAspect),w*sd.playerAspect);	// Player height
 		$("#playerDiv").css({ width:w+"px",top:pt+"px"});						// Set player pos
-		$("#overlayDiv").css({ width:w+"px",top:pt+"px",height:h+"px",left:"8px"});	// Set overlay
-		$("#slideDiv").css({ left:(wid-w2+8)+"px",width:(w2)+"px",top:pt+"px",height:h+"px"}); // Set slider pos/size
-		$("#playerSiz").css({ left:(w+8)+"px",height:h+"px",top:pt+"px"});		// Set sizer pos
+		$("#overlayDiv").css({ width:w+"px",top:pt+"px",height:h+"px",left:(offx+8)+"px"});	// Set overlay
+		$("#slideDiv").css({ left:(wid+offx-w2)+"px",width:(w2)+"px",top:pt+"px",height:h+"px"}); // Set slider pos/size
+		$("#playerSiz").css({ left:(w+offx)+"px",height:h+"px",top:pt+"px"});	// Set sizer pos
 		h+=pt;																	// Point at top of control bar
 		var ct=h+$("#controlDiv").height()+14;									// Contents top
 		var trh=sd.transHgt;													// Copy trans hgt
@@ -512,19 +517,19 @@
 			sw+=$("#slideControlsDiv").width();									// Room for controls
 		$("#slider").width(wid-sw);												// Slider width
 		w=wid*r2;																// Transcript width
-		$("#transDiv").css({ left:cw+"px",width:(w-cw-8)+"px",height:trh+"px",top:ct+"px"});
-		$("#transSiz").css({ left:(w+8)+"px",height:trh+"px",top:ct+"px"});		// Pos transcript sizer
+		$("#transDiv").css({ left:(cw+offx)+"px",width:(w-cw-8)+"px",height:trh+"px",top:ct+"px"});
+		$("#transSiz").css({ left:(w+offx+8)+"px",height:trh+"px",top:ct+"px"}); // Pos transcript sizer
 		w=wid*(1-sd.transInfoRatio)-8;											// Info window width
 		if (w > wid-50) {														// All info
 			w+=8;																// Remove border
 			$("#contentDiv").css("display","none");								// Hide contents
 			$("#transDiv").css("display","none");								// Hide transcript
 			}
-		$("#infoDiv").css({ left:(wid-w+8)+"px",width:Math.max(w,0)+"px",height:trh+"px",top:ct+"px"});
+		$("#infoDiv").css({ left:(wid+offx-w+8)+"px",width:Math.max(w,0)+"px",height:trh+"px",top:ct+"px"});
 		$("#transHgt").css({ top:ct-0+(trh-0+4)+"px"});							// Set sizer top
 		$("#transSearchDiv").css("left",$("#transDiv").width()-104)+"px";		// Search div width
 		$("#infomap").css("opacity",0);											// Hide icon
-			w=$("#infoDiv").width()
+		w=$("#infoDiv").width()
 		$("#infoMapDiv").css({ left:w-62+"px",display:"initial"});				// Set pos and show
 		if (sd.infoMapSource) 	 												// If an infomap
 			$("#infomap").css("opacity",1);										// Show icon
@@ -1035,18 +1040,18 @@
 			cursorAt:{left:0},													// Cursor offext
 			cursor: "col-resize", axis:"x",										// X-only
 			stop: function(event, ui) {											// When done
-				$("#transSiz1").css({ width:"20px", left:"0px" });				// Contract hiding div
+				$("#transSiz1").css({ width:"20px", left:offx+"px" });			// Contract hiding div
 				SendShivaMessage("ShivaAct=transwid",sd.transInfoRatio);		// Send that position has changed
 				ResizePanes();													// Resize panes when done
 				},
 			start: function(event, ui) {										// When starting
-				$("#transSiz1").css({ width:"500px", left:"-250px" });			// Widen hiding div
+				$("#transSiz1").css({ width:"500px", left:(offx-250)+"px" });	// Widen hiding div
 				},
 			drag: function(event, ui) {											// On drag
 				var wid=Math.min($("body").width(),sd.width);					// Cap at screen size
 				if ((" "+sd.width).match("%"))									// If % in width
 					wid=$("body").width()*(sd.width.replace(/%/,"")/100);		// Get proper width											
-			 	sd.transInfoRatio=Math.max(0,Math.min(1,(event.clientX)/wid));	// Set ratio between windows
+			 	sd.transInfoRatio=Math.max(0,Math.min(1,(event.clientX-offx)/wid));	// Set ratio between windows
 				if (Math.abs(sd.transInfoRatio-.5) < .01) 						// If close to center
 					sd.transInfoRatio=.5;										// Snap it there
 				ResizePanes();													// Resize panes
@@ -1055,11 +1060,11 @@
 		
 		$("#transSettings").on("click", function(e) {							// TRANSCRIPT SETTINGS HANDLER
 			if ($("#setpopup").length) {										// If open
-				$("#setpopup").hide('slide',{direction:'right'},300, function(){ $("#setpopup").remove() });	// Hide, then remove it
+				$("#setpopup").hide('slide',{direction:'right'},300+offx, function(){ $("#setpopup").remove() });	// Hide, then remove it
 				return;															// Quit
 				}
 			var w=190;
-			var x=$("#transSearchDiv").css("left").replace(/px/,"")-0+80;
+			var x=$("#transSearchDiv").css("left").replace(/px/,"")-0+80+offx;
 			var str="<table><tr height='18'><td>Language</td><td>";
 			str+=MakeSelect("tLang",false,sd.transLangs.split("|"),sd.transLanguage,"style='font-size:10px'")+"</td></tr>";
 			str+="</table>";
@@ -1079,7 +1084,7 @@
 			shivaLib=new SHIVA_Show("overlayDiv");								// Alloc SHIVA_Show
 			var t=$("#contentDiv").css("top").replace(/px/,"")-0+40;			// In contents
 			shivaLib.DrawOverlay();												// Make sure contexts are set up
-			shivaLib.Annotate(18,t);											// Show it
+			shivaLib.Annotate(18+offx,t);										// Show it
 			});
 
 
@@ -1684,7 +1689,7 @@
 	function Popup(msg)
 	{
 		var x=$("#playerDiv").width()/2-50;
-		var y=$("#playerDiv").css("top").replace(/px/,"")-30+$("#playerDiv").height()/2;
+		var y=$("#playerDiv").css("top").replace(/px/,"")-30+$("#playerDiv").height()/2+offx;
 		$("#popup").remove();
 		var str="<div id='popup' style='position:absolute;display:none;background-color:#eee;left:"+x+"px;top:"+y+"px;border:1px solid;padding:12px' class='qm-rounded-corners'>"+msg+"</div>";
 		$("body").append(str);
@@ -1904,7 +1909,7 @@
 		h=Math.min(h,400);														// Cap at 400
 		str+="width:"+wid/2+"px;height:"+(h-16)+"px;";							// Set sizing
 		str+="background-color:#f8f8f8;border:1px solid #ccc;box-shadow:4px 4px 8px #ccc;";	// Set coloring
-		str+="top:"+$("#infoDiv").offset().top+"px;left:"+wid/4+"px;'>";		// Set position
+		str+="top:"+$("#infoDiv").offset().top+"px;left:"+((wid/4)+offx)+"px;'>";	// Set position
 		str+="<table id='notesTbl' width='100%'>";								// Table
 		str+="<div style='text-align:center;font-size:16px;'>Personal notes</div><hr>";
 		str+="<div style='position:absolute;top:-2px;left:0px;width:100%;text-align:right;color:#999'><br/>Find: <input type='input' id='notesSearch' style='height:12px;width:60px;font-size:10px;padding:0px;margin:0px;border:1px solid #ccc'/>"
