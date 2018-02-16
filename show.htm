@@ -639,9 +639,10 @@
 								$("#"+div+"IF").css("pointer-events","auto");	// Restore assess events
 								}
 							}
+						if (src.match(/TAB=/i)) 								// If open in new tab
+							window.open(src.substr(4),"_blank");				// Open it up
 						else													// Same image base
 							AnimateContent(div+"IF",o,pane);					// Animate iframe, if set
-						
 						$("#"+div+"IF").on("load",function() {					// On iframe loaded
 							if (o.h) {
 								var win=document.getElementById(div+"IF").contentWindow;	// Point at iFrame	
