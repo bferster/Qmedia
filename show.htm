@@ -26,18 +26,12 @@
 		.qm-base { 		font-family:Verdana,Geneva,sans-serif; margin-left:auto; margin-right:auto;
 						}	
 		.qm-title { 	font-family:Verdana,Geneva,sans-serif; font-size:x-large;color:#fff;
-						padding:8px;margin:0px;font-weight:bold;
-						-moz-border-radius:4px;-webkit-border-radius:4px;-khtml-border-radius:4px;border-radius:4px;
+						padding:8px; margin:0px; font-weight:bold; border-radius:4px;
 						background-color:#ccc;
 					  	}
-		.qm-control { 	padding:4px;margin:0px;margin-top:6px;
-						-moz-border-radius:6px;-webkit-border-radius:6px;-khtml-border-radius:6px;border-radius:6px;
-						background-color:#ccc;
+		.qm-control { 	height:20px; padding:4px; margin:0px; margin-top:6px; 
+						border-radius:6px; background-color:#ccc;
 						} 
-		.qm-scrubber { 	
-						}	
-		.qm-slideControls { 	
-						}	
 		.qm-contents { 	font-family:Verdana,Geneva,sans-serif; font-size:13px; 
 						padding:0px; margin:0px;padding-right:16px;background-color:#fff;border-top:8px solid #fff;
 						} 
@@ -468,7 +462,6 @@
 		var pt=8;
 		var r1=sd.playerSlideRatio;												// Ratio 1
 		var r2=sd.transInfoRatio;												// Ratio 2
-		offx=$("#showDiv").offset().left;										// Offset X from base
 		if (playerZen) {														// In Zen mode
 			r1=r2=1;															// Make screen full
 			$("#infoDiv").css("display","none");								// Hide info	
@@ -488,6 +481,7 @@
 		$("#showDiv").width(wid);												// Set show width
 		$("#transHgt").width(wid);												// Set width
 		$("#titleDiv").width(wid-16);											// Set title width
+		$("#controlDiv").width(wid-8);											// Set control width
 		var w=wid*r1-4;															// Player width
 		var w2=wid-w-8;															// Slide width
 		if (w <= 0)				w=0,w2=wid;										// Full slide											
@@ -498,7 +492,8 @@
 			$("#titleDiv").css("display","none")								// Hide bar
 		var h=Math.max(((wid-4)*sd.playerAspect)-(w*sd.playerAspect),w*sd.playerAspect);	// Player height
 		$("#playerDiv").css({ width:w+"px",top:pt+"px"});						// Set player pos
-		$("#overlayDiv").css({ width:w+"px",top:pt+"px",height:h+"px",left:(offx+8)+"px"});	// Set overlay
+		offx=$("#playerDiv").offset().left;										// Offset X from base
+		$("#overlayDiv").css({ width:w+"px",top:pt+"px",height:h+"px",left:offx+"px"});	// Set overlay
 		$("#slideDiv").css({ left:(wid+offx-w2)+"px",width:(w2)+"px",top:pt+"px",height:h+"px"}); // Set slider pos/size
 		$("#playerSiz").css({ left:(w+offx)+"px",height:h+"px",top:pt+"px"});	// Set sizer pos
 		h+=pt;																	// Point at top of control bar
@@ -514,7 +509,7 @@
 		$("#controlDiv").css({ top:h+"px" });									// Position control slider
 		var sw=164;																// Account for t/c & play but												
 		if (sd.slideVectors)													// If slides
-			sw+=$("#slideControlsDiv").width();									// Room for controls
+			sw+=54;																// Room for controls
 		$("#slider").width(wid-sw);												// Slider width
 		w=wid*r2;																// Transcript width
 		$("#transDiv").css({ left:(cw+offx)+"px",width:(w-cw-8)+"px",height:trh+"px",top:ct+"px"});
@@ -525,7 +520,7 @@
 			$("#contentDiv").css("display","none");								// Hide contents
 			$("#transDiv").css("display","none");								// Hide transcript
 			}
-		$("#infoDiv").css({ left:(wid+offx-w+8)+"px",width:Math.max(w,0)+"px",height:trh+"px",top:ct+"px"});
+		$("#infoDiv").css({ left:(wid+offx-w+8)+"px",width:Math.max(w-8,0)+"px",height:trh+"px",top:ct+"px"});
 		$("#transHgt").css({ top:ct-0+(trh-0+4)+"px"});							// Set sizer top
 		$("#transSearchDiv").css("left",$("#transDiv").width()-104)+"px";		// Search div width
 		$("#infomap").css("opacity",0);											// Hide icon
@@ -538,7 +533,7 @@
 		RunInfo("resize");														// Resize info
 		if (sd.slideBackCol != undefined) 										// If a slide bg col spec'd
 			$("#slideDiv").css("background-color",sd.slideBackCol);				// Set it
-		}		
+}		
 
 	function AnimatePanes(end, dur, which)									// ANIMATE CHANGE OF PANE RATIO
 	{
