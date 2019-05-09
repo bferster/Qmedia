@@ -6,6 +6,7 @@ header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST');
 require_once('config7.php');
 			
+	$pass=null;
 	$query="SELECT * FROM qshow";								// Query 
 	if (isSet($_GET['v'])) 		 								// If v set
 		$query.=" WHERE version = '".$_GET['v']."'";			// Add ver
@@ -16,7 +17,7 @@ require_once('config7.php');
 		exit();													// Quit
 		}
 	$num=min(mysqli_num_rows($result),200);						// Get num rows, cap at max
-	$pass=$_GET['pass'];										// Password
+	if (isSet($_GET['pass'])) $pass=$_GET['pass'];				// Password
 	print("<font face='sans-serif'>");							// Font
 	print("<b>The current 200 projects</b>:<br>");				// Header
 	while ($row=mysqli_fetch_assoc($result)) {					// Loop through rows

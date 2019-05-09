@@ -5,8 +5,10 @@ header('Pragma: no-cache');
 require_once('config.php');
 	
 	$id=$_GET['id'];											// Get ID
-	$password=$_GET['password'];								// Password
-	$password=addEscapes($password);							// Escape password	
+	if (isSet($_GET['password'])) {								// Password
+		$password=$_GET['password'];							// Get	
+		$password=addEscapes($password);						// Escape 
+		}	
 	$id=addEscapes($id);										// ID
 	$query="SELECT * FROM qshow WHERE id = '$id'";				// Make query
 	$result=mysql_query($query);								// Run query

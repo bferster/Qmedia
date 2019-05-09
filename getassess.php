@@ -2,7 +2,9 @@
 header('Cache-Control: no-cache, no-store, must-revalidate'); 
 header('Expires: Sun, 01 Jul 2005 00:00:00 GMT'); 
 header('Pragma: no-cache'); 
-require_once('config.php');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: POST');
+require_once('config7.php');
 			
 	$email="";
 	$show="";
@@ -21,26 +23,27 @@ require_once('config.php');
 		$query.=" AND";											// Add AND
 	if ($show)													// If a show spec'd
 		$query.=" showNum = '".$show."'";						// Look for a particular show
-	$result=mysql_query($query);								// Query
-	if ($result == false) {										// Bad query
+		$result=mysqli_query($link, $query);					// Run query
+		if ($result == false) {									// Bad query
 		print("-1\n");											// Return error
+		mysqli_free_result($result);							// Free
+		mysqli_close($link);									// Close session
 		exit();													// Quit
 		}
-	$num=mysql_numrows($result);								// Get num rows
 	print("<font face='sans-serif'>");							// Font
-	for ($i=0;$i<$num;++$i) {									// For each record
-		print("The assessment result for <b>".mysql_result($result,$i,"email")."</b> in show <b>".mysql_result($result,$i,"showNum")."</b> is:<br>");	// Header
+	while ($row=mysqli_fetch_assoc($result)) {					// Loop through rows
+		print("The assessment result for <b>".$row["email"]."</b> in show <b>".$row["showNum"]."</b> is:<br>");	// Header
 		print("<blockquote>");									// Indent
-		$s=mysql_result($result,$i,"events");					// Get events
+		$s=$row["events"];										// Get events
 		$s=str_replace("\t","&nbsp;&nbsp;",$s);					// Tabs to spaces	
 		$s=str_replace("\n","<br>",$s);							// CRs to BRs		
 		print($s);												// Show events
 		print("<br></blockquote>");								// BR
 		}
-	if (!$num)													// No record
+	if (!mysqli_num_rows($result))								// If no rows
 		print("No assessment results to show for $email");		// Say it
 	print("</font>");											// Font
-	
-	mysql_close();												// Close session
+	mysqli_free_result($result);								// Free
+	mysqli_close($link);										// Close session
 ?>
 	
