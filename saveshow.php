@@ -52,7 +52,7 @@ require_once('config7.php');
 		if ($result == false)									// Bad save
 			print("-2");										// Show error 
 		else
-			print( mysqli_insert_id($link)."\n");				// Return ID of new resource
+			print(mysqli_insert_id($link)."\n");				// Return ID of new resource
 		}
 	else{														// We have one already
 		$row=mysqli_fetch_assoc($result);						// Get row		

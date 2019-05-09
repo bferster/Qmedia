@@ -66,7 +66,7 @@ require_once('config.php');
 	{
 		if (!$str)												// If nothing
 			return $str;										// Quit
-		$str=mysql_real_escape_string($str);					// Add slashes
+		$str=mysqli_real_escape_string($link,$str);				// Add slashes
 		$str=str_replace("\r","",$str);							// No crs
 		return $str;
 	}
