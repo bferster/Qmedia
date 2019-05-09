@@ -2,42 +2,45 @@
 header('Cache-Control: no-cache, no-store, must-revalidate'); 
 header('Expires: Sun, 01 Jul 2005 00:00:00 GMT'); 
 header('Pragma: no-cache'); 
-require_once('config.php');
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: POST');
+require_once('config7.php');
 			
 	$query="SELECT * FROM qshow";								// Query 
 	if (isSet($_GET['v'])) 		 								// If v set
 		$query.=" WHERE version = '".$_GET['v']."'";			// Add ver
 	$query.=" ORDER by date DESC";								// Sort by date
-	$result=mysql_query($query);								// Query
+	$result=mysqli_query($link, $query);						// Run query
 	if ($result == false) {										// Bad query
 		print("Error getting projects");						// Return error
 		exit();													// Quit
 		}
-	$num=min(mysql_numrows($result),200);						// Get num rows, cap at max
+	$num=min(mysqli_num_rows($result),200);						// Get num rows, cap at max
 	$pass=$_GET['pass'];										// Password
 	print("<font face='sans-serif'>");							// Font
 	print("<b>The current 200 projects</b>:<br>");				// Header
-	for ($i=0;$i<$num;++$i) {									// For each record
+	while ($row=mysqli_fetch_assoc($result)) {					// Loop through rows
 		print("<blockquote>");									// Indent
-		$d=mysql_result($result,$i,"date");						// Get date string
+		$d=$row['date'];										// Get date string
 		$d=strtotime("-4 hours",strtotime($d));					// Get as time
 		$d=date("m/d - g:ia",$d);								// Format
 		print($d." &nbsp;");									// Date
-		if (mysql_result($result,$i,"version") == 1)			// If MapScholar
-			print("<a href='//www.viseyes.org/mapscholar/?".mysql_result($result,$i,"id")."' target='blank'>M = ".mysql_result($result,$i,"id")."</a> &nbsp;");	// Id
-		else if (mysql_result($result,$i,"version") == 4)		// If VisualEyes 5
-			print("<a href='//www.viseyes.org/visualeyes/?".mysql_result($result,$i,"id")."' target='blank'>V = ".mysql_result($result,$i,"id")."</a> &nbsp;");	// Id
-		else if (mysql_result($result,$i,"version") == 5)		// If Folio
-			print("<a href='//www.viseyes.org/folio/?".mysql_result($result,$i,"id")."' target='blank'>F = ".mysql_result($result,$i,"id")."</a>  &nbsp;");		// Id
+		if ($row["version"] == 1)								// If MapScholar
+			print("<a href='//www.viseyes.org/mapscholar/?".$row["id"]."' target='blank'>M = ".$row["id"]."</a> &nbsp;");	// Id
+		else if ($row["version"] == 4)							// If VisualEyes 5
+			print("<a href='//www.viseyes.org/visualeyes/?".$row["id"]."' target='blank'>V = ".$row["id"]."</a> &nbsp;");	// Id
+		else if ($row["version"] == 5)							// If Folio
+			print("<a href='//www.viseyes.org/folio/?".$row["id"]."' target='blank'>F = ".$row["id"]."</a>  &nbsp;");		// Id
 		else 													// Qmedia
-			print("<a href='//www.qmediaplayer.com/show.htm?".mysql_result($result,$i,"id")."' target='blank'>Q = ".mysql_result($result,$i,"id")."</a> &nbsp;");	// Id
-		print(mysql_result($result,$i,"email")." | ");			// Email
-		print(mysql_result($result,$i,"title"));				// Title
+			print("<a href='//www.qmediaplayer.com/show.htm?".$row["id"]."' target='blank'>Q = ".$row["id"]."</a> &nbsp;");	// Id
+		print($row["email"]." | ");								// Email
+		print($row["title"]);									// Title
 		if ($pass)												// If wanting password
-			print(" | ".mysql_result($result,$i,"password"));	// Password
+			print(" | ".$row["password"]);						// Password
 		print("<br></blockquote>");								// BR
 		}
 	print("</font>");											// Font
-	mysql_close();												// Close session
+	mysqli_free_result($result);								// Free
+	mysqli_close($link);										// Close session
 ?>
 	
