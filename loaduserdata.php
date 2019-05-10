@@ -11,7 +11,7 @@ require_once('config7.php');
 										
 	$query="SELECT * FROM qusers WHERE email = '".$email."' AND showNum = '".$show."'";	// Look for data
 	$result=mysqli_query($link, $query);						// Run query
-	if (mysqli_num_rows($result)) {								// If no rows
+	if (mysqli_num_rows($result)) {								// If rows
 		$row=mysqli_fetch_assoc($result);						// Get row
 		$s=$row["events"];										// Get events field
 		$s=str_replace("\r\n","\n",$s);							// No crlf
